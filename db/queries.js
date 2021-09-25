@@ -1,5 +1,6 @@
 const cTable = require('console.table');
 const mysql = require("mysql2/promise");
+const connection = require('./db');
 
 async function connectDb() {
     return await mysql.createConnection({
@@ -34,8 +35,13 @@ async function getAllEmployees() {
   console.table(rows);
 }
 
+function quitApp() {
+  connection.end;
+}
+
 module.exports = {
     getAllDepartments,
     getAllEmployees,
-    getAllRoles
+    getAllRoles,
+    quitApp
 }

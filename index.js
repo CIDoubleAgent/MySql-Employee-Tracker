@@ -8,17 +8,20 @@ function handlePrompts() {
         console.table(responseData);
     
         switch(responseData.options) {
-            case "all_departments": 
-                await queryHandlers.getAllDepartments();
+            case "all_employees": 
+                await queryHandlers.getAllEmployees();
                 handlePrompts();
                 break;
             case "all_roles": 
                 await queryHandlers.getAllRoles();
                 handlePrompts();
                 break;
-            case "all_employees": 
-                await queryHandlers.getAllEmployees();
+            case "all_departments": 
+                await queryHandlers.getAllDepartments();
                 handlePrompts();
+                break;
+            case "quit":
+                queryHandlers.quitApp()
                 break;
         }
     })

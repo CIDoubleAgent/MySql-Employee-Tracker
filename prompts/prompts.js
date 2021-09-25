@@ -31,6 +31,10 @@ const startPrompt = [{
             value: "add_department",
             name: "Add Department"
         },
+        {
+            value: "quit",
+            name: "Quit"
+        }
     ]
 }];
 
