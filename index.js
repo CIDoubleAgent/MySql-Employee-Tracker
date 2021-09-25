@@ -5,7 +5,7 @@ const queryHandlers = require("./db/queries.js");
 
 function handlePrompts() {
     prompt(startPrompt).then(async(responseData) => {
-        console.table(responseData)
+        console.table(responseData);
     
         switch(responseData.options) {
             case "all_departments": 
