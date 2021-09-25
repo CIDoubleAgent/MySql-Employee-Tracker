@@ -13,10 +13,12 @@ function handlePrompts() {
                 handlePrompts();
                 break;
             case "all_roles": 
-                queryHandlers.getAllRoles();
+                await queryHandlers.getAllRoles();
+                handlePrompts();
                 break;
             case "all_employees": 
-                queryHandlers.getAllEmployees();
+                await queryHandlers.getAllEmployees();
+                handlePrompts();
                 break;
         }
     })
