@@ -11,9 +11,8 @@ async function connectDb() {
 }
 
 async function getAllRoles() {
-  // Query to get all roles
   const connection = await connectDb();
-  const [rows, feilds] = await connection.query(
+  const [rows, fields] = await connection.query(
     'SELECT * FROM `roles`'
   );
   console.table(rows);
@@ -21,22 +20,18 @@ async function getAllRoles() {
 
 async function getAllDepartments() {
     const connection = await connectDb();
-
-    const [rows, feilds] = await connection.query(
-        'SELECT * FROM `department`'
+    const [rows, fields] = await connection.query(
+        'SELECT * FROM `departments`'
     );
-
     console.table(rows);
 }
 
-function getAllEmployees() {
-  connection.query(
+async function getAllEmployees() {
+  const connection = await connectDb();
+  const [rows, fields] = await connection.query(
     'SELECT * FROM `employees`',
-    (err, results, fields) => {
-      console.log(results); // results contains rows returned by server
-      console.log(fields); // fields contains extra meta data about results, if available
-    }
   );
+  console.table(rows);
 }
 
 module.exports = {
