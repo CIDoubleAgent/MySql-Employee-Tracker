@@ -3,15 +3,15 @@ CREATE DATABASE employee_db;
 USE employee_db;
 
 CREATE TABLE departments(
-    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30)
 );
 
 CREATE TABLE roles(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30),
+    salary DECIMAL,
     department_id INT,
-    salary INT(6),
     FOREIGN KEY(department_id) REFERENCES departments(id)
 );
 
