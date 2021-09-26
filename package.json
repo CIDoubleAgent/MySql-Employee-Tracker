@@ -1,11 +1,12 @@
 {
-  "name": "MySql-Employee-Tracker",
+  "name": "mysql-employee-tracker",
   "version": "1.0.0",
   "description": "Employee tracker",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "seed": "node seeds.js"
   },
   "repository": {
     "type": "git",
