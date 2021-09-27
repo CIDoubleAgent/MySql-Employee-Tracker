@@ -71,7 +71,7 @@ async function addDepartment() {
     {
       name: "newDepartment",
       type: "input",
-      message: "What is the name of the department you are adding?"
+      message: "What is the name of the department?"
     }
   ]).then (function (answer) {
     const query = connection.query(
