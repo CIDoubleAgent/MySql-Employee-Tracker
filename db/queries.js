@@ -14,7 +14,8 @@ async function connectDb() {
 async function getAllRoles() {
   const connection = await connectDb();
   const [rows, fields] = await connection.query(
-    'SELECT * FROM `roles`'
+    `SELECT roles.id, roles.title, departments.name AS department, roles.salary FROM roles
+    INNER JOIN departments ON roles.department_id = departments.id`
   );
   console.table(rows);
 }
@@ -22,7 +23,8 @@ async function getAllRoles() {
 async function getAllDepartments() {
     const connection = await connectDb();
     const [rows, fields] = await connection.query(
-        'SELECT * FROM `departments`'
+        `SELECT * FROM departments
+        ORDER BY name ASC`
     );
     console.table(rows);
 }
@@ -30,7 +32,8 @@ async function getAllDepartments() {
 async function getAllEmployees() {
   const connection = await connectDb();
   const [rows, fields] = await connection.query(
-    'SELECT * FROM `employees`',
+    `SELECT employees.id, employees.first_name, employees.last_name, roles.title AS title FROM employees 
+    INNER JOIN roles ON employees.role_id = roles.id`
   );
   console.table(rows);
 }
