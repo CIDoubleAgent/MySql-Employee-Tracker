@@ -21,6 +21,11 @@ function handlePrompts() {
                 break;
             case "add_department":
                 await queryHandlers.addDepartment();
+                handlePrompts();
+                break;
+            case "add_role":
+                await queryHandlers.addRole();
+                handlePrompts();
                 break;
             case "quit":
                 queryHandlers.quitApp()

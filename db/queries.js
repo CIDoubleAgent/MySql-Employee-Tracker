@@ -61,8 +61,29 @@ function updateEmployeeRole() {
 
 }
 
-function addRole() {
-
+async function addRole() {
+  const connection = await connectDb();
+  const [rows, fields] = await connection.query(
+    `SELECT * FROM departments`
+  );
+  await inquirer.prompt([
+    {
+      name: "newRoleName",
+      type: "input",
+      message: "What is the name of the role?"
+    },
+    {
+      name: "newRoleSalary",
+      type: "input",
+      message: "What is the salary of the role?"
+    },
+    {
+      name: "newRoleDept",
+      type: "list",
+      message: "Which department does the role belong to?",
+      choices: rows
+    },
+  ]);
 }
 
 async function addDepartment() {
@@ -78,8 +99,6 @@ async function addDepartment() {
     `INSERT INTO departments SET ?`,
     {name: answer.newDepartment}
     );
-  }).then (function() {
-    inquirer.prompt(startPrompt);
   });
 }
 
