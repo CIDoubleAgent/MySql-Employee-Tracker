@@ -41,15 +41,34 @@ async function getAllEmployees() {
     employees.last_name, 
     roles.title, 
     departments.name AS department, 
-    roles.salary FROM employees 
-    LEFT JOIN roles ON employees.role_id = roles.id 
-    LEFT JOIN departments ON roles.department_id = departments.id`
+    roles.salary, 
+    CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees 
+    INNER JOIN roles ON employees.role_id = roles.id 
+    INNER JOIN departments ON roles.department_id = departments.id 
+    LEFT JOIN employees manager ON employees.manager_id = manager.id`
   );
   console.table(rows);
 }
 
+function addEmployee() {
+
+}
+
+function updateEmployeeRole() {
+
+}
+
+function addRole() {
+
+}
+
+function addDepartment() {
+
+}
+
 function quitApp() {
   connection.end;
+  process.exit();
 }
 
 module.exports = {
