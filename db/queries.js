@@ -83,7 +83,12 @@ async function addRole() {
       message: "Which department does the role belong to?",
       choices: rows
     },
-  ]);
+  ]).then (function (answers) {
+    const query = connection.query(
+    `INSERT INTO roles SET ?`,
+    {title: answers.newRoleName, salary: answers.newRoleSalary}
+    );
+  });
 }
 
 async function addDepartment() {
