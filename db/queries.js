@@ -1,5 +1,8 @@
 const cTable = require('console.table');
+const inquirer = require('inquirer');
 const mysql = require("mysql2/promise");
+const handlePrompts = require('..');
+const startPrompt = require('../prompts/prompts');
 const connection = require('./db');
 
 async function connectDb() {
@@ -62,8 +65,22 @@ function addRole() {
 
 }
 
-function addDepartment() {
-
+async function addDepartment() {
+  const connection = await connectDb();
+  await inquirer.prompt([
+    {
+      name: "newDepartment",
+      type: "input",
+      message: "What is the name of the department you are adding?"
+    }
+  ]).then (function (answer) {
+    const query = connection.query(
+    `INSERT INTO departments SET ?`,
+    {name: answer.newDepartment}
+    );
+  }).then (function() {
+    inquirer.prompt(startPrompt);
+  });
 }
 
 function quitApp() {
@@ -75,5 +92,9 @@ module.exports = {
     getAllDepartments,
     getAllEmployees,
     getAllRoles,
+    addEmployee,
+    updateEmployeeRole,
+    addRole,
+    addDepartment,
     quitApp
 }
