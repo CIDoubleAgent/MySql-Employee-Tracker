@@ -66,6 +66,7 @@ async function addRole() {
   const [rows, fields] = await connection.query(
     `SELECT * FROM departments`
   );
+  console.table(rows);
   await inquirer.prompt([
     {
       name: "newRoleName",
@@ -83,7 +84,7 @@ async function addRole() {
       message: "Which department does the role belong to?",
       choices: rows
     },
-  ]).then (function (answers) {
+  ]).then ((answers) => {
     const query = connection.query(
     `INSERT INTO roles SET ?`,
     {title: answers.newRoleName, salary: answers.newRoleSalary}
