@@ -27,6 +27,10 @@ function handlePrompts() {
                 await queryHandlers.addRole();
                 handlePrompts();
                 break;
+            case "add_employee":
+                await queryHandlers.addEmployee();
+                handlePrompts();
+                break;
             case "quit":
                 queryHandlers.quitApp()
                 break;

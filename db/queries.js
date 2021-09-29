@@ -53,9 +53,40 @@ async function getAllEmployees() {
   console.table(rows);
 }
 
-function addEmployee() {
-
+async function addEmployee() {
+  const connection = await connectDb();
+  const [rows, fields] = await connection.query(
+    `SELECT * FROM roles`
+  );
+  const roleChoices = rows.map(e => {
+    return {name: e.title, value: e.id}
+  });
+  await inquirer.prompt([
+    {
+      name: "newEmpFirstName",
+      type: "input",
+      message: "What is the employees first name?"
+    },
+    {
+      name: "newEmpLastName",
+      type: "input",
+      message: "What is the employees last name?"
+    },
+    {
+      name: "newEmpRole",
+      type: "list",
+      message: "Which department does the role belong to?",
+      choices: roleChoices
+    },
+  ]).then ((answers) => {
+    const query = connection.query(
+    `INSERT INTO employees SET ?`,
+    {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole}
+    );
+    console.log("Added new employee to the database");
+  });
 }
+
 
 function updateEmployeeRole() {
 
@@ -91,8 +122,8 @@ async function addRole() {
     `INSERT INTO roles SET ?`,
     {title: answers.newRoleName, salary: answers.newRoleSalary, department_id: answers.newRoleDept}
     );
+    console.log("Added new role to the database");
   });
-  console.log("--Added ", /* ? */ " to the database");
 }
 
 async function addDepartment() {
