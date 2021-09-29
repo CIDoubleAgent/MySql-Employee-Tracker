@@ -22,7 +22,8 @@ async function getAllRoles() {
     departments.name AS department, 
     roles.salary FROM roles
     INNER JOIN departments 
-    ON roles.department_id = departments.id`
+    ON roles.department_id = departments.id 
+    ORDER BY id ASC`
   );
   console.table(rows);
 }
@@ -48,7 +49,8 @@ async function getAllEmployees() {
     CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees 
     INNER JOIN roles ON employees.role_id = roles.id 
     INNER JOIN departments ON roles.department_id = departments.id 
-    LEFT JOIN employees manager ON employees.manager_id = manager.id`
+    LEFT JOIN employees manager ON employees.manager_id = manager.id 
+    ORDER BY id ASC`
   );
   console.table(rows);
 }
@@ -78,12 +80,18 @@ async function addEmployee() {
       message: "Which department does the role belong to?",
       choices: roleChoices
     },
+    // {
+    //   name: "newEmpManager",
+    //   type: "list",
+    //   message: "Who is the employee's manager?",
+    //   choices: managerChoices
+    // },
   ]).then ((answers) => {
     const query = connection.query(
     `INSERT INTO employees SET ?`,
     {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole}
     );
-    console.log("Added new employee to the database");
+    console.log("--Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database");
   });
 }
 
@@ -122,7 +130,7 @@ async function addRole() {
     `INSERT INTO roles SET ?`,
     {title: answers.newRoleName, salary: answers.newRoleSalary, department_id: answers.newRoleDept}
     );
-    console.log("Added new role to the database");
+    console.log("--Added ", answers.newRoleName, " to the database");
   });
 }
 
@@ -139,6 +147,7 @@ async function addDepartment() {
     `INSERT INTO departments SET ?`,
     {name: answer.newDepartment}
     );
+    console.log("--Added ", answer.newDepartment, " to the database");
   });
 }
 
