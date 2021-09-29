@@ -66,7 +66,9 @@ async function addRole() {
   const [rows, fields] = await connection.query(
     `SELECT * FROM departments`
   );
-  console.table(rows);
+  const departmentChoices = rows.map(e => {
+    return {name: e.name, value: e.id}
+  });
   await inquirer.prompt([
     {
       name: "newRoleName",
@@ -82,14 +84,15 @@ async function addRole() {
       name: "newRoleDept",
       type: "list",
       message: "Which department does the role belong to?",
-      choices: rows
+      choices: departmentChoices
     },
   ]).then ((answers) => {
     const query = connection.query(
     `INSERT INTO roles SET ?`,
-    {title: answers.newRoleName, salary: answers.newRoleSalary}
+    {title: answers.newRoleName, salary: answers.newRoleSalary, department_id: answers.newRoleDept}
     );
   });
+  console.log("--Added ", /* ? */ " to the database");
 }
 
 async function addDepartment() {
