@@ -16,7 +16,7 @@ async function connectDb() {
 
 async function getAllRoles() {
   const connection = await connectDb();
-  const [rows, fields] = await connection.query(
+  const [rows] = await connection.query(
     `SELECT roles.id, 
     roles.title, 
     departments.name AS department, 
@@ -30,7 +30,7 @@ async function getAllRoles() {
 
 async function getAllDepartments() {
     const connection = await connectDb();
-    const [rows, fields] = await connection.query(
+    const [rows] = await connection.query(
         `SELECT * FROM departments
         ORDER BY name ASC`
     );
@@ -39,7 +39,7 @@ async function getAllDepartments() {
 
 async function getAllEmployees() {
   const connection = await connectDb();
-  const [rows, fields] = await connection.query(
+  const [rows] = await connection.query(
     `SELECT employees.id, 
     employees.first_name, 
     employees.last_name, 
@@ -57,12 +57,13 @@ async function getAllEmployees() {
 
 async function addEmployee() {
   const connection = await connectDb();
-  const [rows, fields] = await connection.query(
+  const [rows] = await connection.query(
     `SELECT * FROM roles`
   );
   const roleChoices = rows.map(e => {
     return {name: e.title, value: e.id}
   });
+
   await inquirer.prompt([
     {
       name: "newEmpFirstName",
@@ -77,7 +78,7 @@ async function addEmployee() {
     {
       name: "newEmpRole",
       type: "list",
-      message: "Which department does the role belong to?",
+      message: "What is the employee's role?",
       choices: roleChoices
     },
     // {
@@ -87,7 +88,7 @@ async function addEmployee() {
     //   choices: managerChoices
     // },
   ]).then ((answers) => {
-    const query = connection.query(
+    connection.query(
     `INSERT INTO employees SET ?`,
     {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole}
     );
@@ -102,7 +103,7 @@ function updateEmployeeRole() {
 
 async function addRole() {
   const connection = await connectDb();
-  const [rows, fields] = await connection.query(
+  const [rows] = await connection.query(
     `SELECT * FROM departments`
   );
   const departmentChoices = rows.map(e => {
@@ -126,7 +127,7 @@ async function addRole() {
       choices: departmentChoices
     },
   ]).then ((answers) => {
-    const query = connection.query(
+    connection.query(
     `INSERT INTO roles SET ?`,
     {title: answers.newRoleName, salary: answers.newRoleSalary, department_id: answers.newRoleDept}
     );
@@ -143,7 +144,7 @@ async function addDepartment() {
       message: "What is the name of the department?"
     }
   ]).then (function (answer) {
-    const query = connection.query(
+    connection.query(
     `INSERT INTO departments SET ?`,
     {name: answer.newDepartment}
     );
