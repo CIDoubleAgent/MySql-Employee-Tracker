@@ -3,14 +3,18 @@
 ## Description
 This command line application allows a user to view a table including associated data of either all employees, all roles or all departments. The user can choose to add employees, roles or departments via the main selection menu.
 ## Table of contents
+* [Links](#links)
 * [Installation](#installation)
 * [Usage](#usage)
 * [How to Contribute](#how-to-contribute)
 * [Tests](#tests)
 * [Liscense](#liscense)
 * [Questions](#questions)
+## Links
+* Video Demonstration: https://youtu.be/Xrtck9zop3s
+* GitHub Repository: https://github.com/CIDoubleAgent/MySql-Employee-Tracker
 ## Installation
-Clone the repo locally, install the dependencies, in Node.js command prompt navigate to the root folder of the repo and run npm start
+Clone the repo locally, install the dependencies listed in the package.json file, run the schema with Table Plus or MySQL Workbench, then in Node.js command prompt navigate to the root folder of the repo and run "npm start".
 ## Usage
 start command: npm start
 ## How to contribute
