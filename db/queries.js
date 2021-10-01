@@ -109,7 +109,7 @@ async function addEmployee() {
     {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole, manager_id: answers.newEmpManager}
     );
 
-    console.log(chalk.yellow("* Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database"));
+    console.log(chalk.yellow("+ Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database"));
   });
 }
 
@@ -161,7 +161,7 @@ async function updateEmployeeRole() {
         `UPDATE employees SET role_id=${newRole.id} WHERE id=${selectedEmployee.id};`,
         {role_id: newRole.id}
       );
-      console.log(chalk.yellow("* Updated employees role"));      
+      console.log(chalk.yellow("+ Updated employees role"));      
     });
   });
   
@@ -200,7 +200,7 @@ async function addRole() {
     `INSERT INTO roles SET ?`,
     {title: answers.newRoleName, salary: answers.newRoleSalary, department_id: answers.newRoleDept}
     );
-    console.log(chalk.yellow("* Added ", answers.newRoleName, " to the database"));
+    console.log(chalk.yellow("+ Added ", answers.newRoleName, " to the database"));
   });
 }
 
@@ -219,7 +219,7 @@ async function addDepartment() {
     {name: answer.newDepartment}
     );
     
-    console.log(chalk.yellow("* Added ", answer.newDepartment, " to the database"));
+    console.log(chalk.yellow("+ Added ", answer.newDepartment, " to the database"));
   });
 }
 
