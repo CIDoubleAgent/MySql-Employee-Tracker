@@ -1,8 +1,6 @@
 const cTable = require('console.table');
 const inquirer = require('inquirer');
 const mysql = require("mysql2/promise");
-const handlePrompts = require('..');
-const startPrompt = require('../prompts/prompts');
 const connection = require('./db');
 
 async function connectDb() {
@@ -16,6 +14,7 @@ async function connectDb() {
 
 async function getAllRoles() {
   const connection = await connectDb();
+
   const [rows] = await connection.query(
     `SELECT roles.id, 
     roles.title, 
@@ -25,20 +24,24 @@ async function getAllRoles() {
     ON roles.department_id = departments.id 
     ORDER BY id ASC`
   );
+
   console.table(rows);
 }
 
 async function getAllDepartments() {
     const connection = await connectDb();
+
     const [rows] = await connection.query(
         `SELECT * FROM departments
         ORDER BY name ASC`
     );
+
     console.table(rows);
 }
 
 async function getAllEmployees() {
   const connection = await connectDb();
+
   const [rows] = await connection.query(
     `SELECT employees.id, 
     employees.first_name, 
@@ -52,14 +55,17 @@ async function getAllEmployees() {
     LEFT JOIN employees manager ON employees.manager_id = manager.id 
     ORDER BY id ASC`
   );
+
   console.table(rows);
 }
 
 async function addEmployee() {
   const connection = await connectDb();
+
   const [rows] = await connection.query(
     `SELECT * FROM roles`
   );
+  
   const roleChoices = rows.map(e => {
     return {name: e.title, value: e.id}
   });
@@ -81,34 +87,105 @@ async function addEmployee() {
       message: "What is the employee's role?",
       choices: roleChoices
     },
-    // {
-    //   name: "newEmpManager",
-    //   type: "list",
-    //   message: "Who is the employee's manager?",
-    //   choices: managerChoices
-    // },
   ]).then ((answers) => {
     connection.query(
     `INSERT INTO employees SET ?`,
     {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole}
     );
+
+    //insert function to get manager names for list and prompt for employee manager
+
     console.log("--Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database");
   });
+
+  // [rows] = await connection.query(`SELECT * FROM employees`);
+  // const managerChoices = rows.map(e => {
+  //   return {name: e.first_name + " " + e.last_name, value: e.id}
+  // })
+
+  // await inquirer.prompt([
+  //   {
+  //     name: "newEmpManager",
+  //     type: "list",
+  //     message: "Who is the employee's manager?",
+  //     choices: managerChoices
+  //   },
+  // ])
 }
 
+async function updateEmployeeRole() {
+  const connection = await connectDb();
 
-function updateEmployeeRole() {
+  const [employees] = await connection.query(
+    `SELECT * FROM employees`
+  );
 
+ 
+
+  const employeeChoices = employees.map(e => {
+    return {name: e.first_name + " " + e.last_name, roleId: e.role_id, id: e.id}
+  });
+
+  
+  console.log(employees)
+  await inquirer.prompt([
+    {
+      name: "selectEmployee",
+      type: "list",
+      message: "Which employee's role would you like to update?",
+      choices: employeeChoices
+    }
+  ]).then(async (answers) => {
+    console.log(answers.selectEmployee);
+    const [roles] = await connection.query(
+      `SELECT * FROM roles`
+    );
+    
+    const roleChoices = roles.map(e => {
+      return {id: e.id, name: e.title}
+    });
+
+    await inquirer.prompt([
+      {
+        name: "newRole",
+        type: "list",
+        message: "Which role do you want to assign the selected employee?",
+        choices: roleChoices
+      }
+    ]).then(async (response) => {
+      const newRole = roleChoices.find((role) => {
+        return role.name === response.newRole
+      });
+
+      const selectedEmployee = employeeChoices.find((employee) => {
+        return employee.name === answers.selectEmployee
+      });
+
+      await connection.query(
+        `UPDATE employees SET role_id=${newRole.id} WHERE id=${selectedEmployee.id};`,
+        {role_id: newRole.id}
+      );
+      console.log("end of query");
+  
+        
+    })
+
+    
+  });
+  
 }
 
 async function addRole() {
   const connection = await connectDb();
+
   const [rows] = await connection.query(
     `SELECT * FROM departments`
   );
+
   const departmentChoices = rows.map(e => {
     return {name: e.name, value: e.id}
   });
+
   await inquirer.prompt([
     {
       name: "newRoleName",
@@ -137,6 +214,7 @@ async function addRole() {
 
 async function addDepartment() {
   const connection = await connectDb();
+
   await inquirer.prompt([
     {
       name: "newDepartment",
@@ -148,6 +226,7 @@ async function addDepartment() {
     `INSERT INTO departments SET ?`,
     {name: answer.newDepartment}
     );
+    
     console.log("--Added ", answer.newDepartment, " to the database");
   });
 }
