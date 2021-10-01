@@ -63,12 +63,21 @@ async function getAllEmployees() {
 async function addEmployee() {
   const connection = await connectDb();
 
-  const [rows] = await connection.query(
+  const [roles] = await connection.query(
     `SELECT * FROM roles`
   );
+
+  const [managers] = await connection.query(
+    `SELECT * FROM employees WHERE employees.manager_id IS NULL`
+  );
+  console.table(managers);
   
-  const roleChoices = rows.map(e => {
+  const roleChoices = roles.map(e => {
     return {name: e.title, value: e.id}
+  });
+
+  const managerChoices = managers.map(e => {
+    return {name: e.first_name + " " + e.last_name, value: e.id}
   });
 
   await inquirer.prompt([
@@ -88,30 +97,20 @@ async function addEmployee() {
       message: chalk.greenBright("What is the employee's role?"),
       choices: roleChoices
     },
+    {
+      name: "newEmpManager",
+      type: "list",
+      message: chalk.greenBright("Who is the employee's manager?"),
+      choices: managerChoices
+    },
   ]).then ((answers) => {
     connection.query(
     `INSERT INTO employees SET ?`,
-    {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole}
+    {first_name: answers.newEmpFirstName, last_name: answers.newEmpLastName, role_id: answers.newEmpRole, manager_id: answers.newEmpManager}
     );
-
-    //insert function to get manager names for list and prompt for employee manager
 
     console.log(chalk.yellow("--Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database"));
   });
-
-  // [rows] = await connection.query(`SELECT * FROM employees`);
-  // const managerChoices = rows.map(e => {
-  //   return {name: e.first_name + " " + e.last_name, value: e.id}
-  // })
-
-  // await inquirer.prompt([
-  //   {
-  //     name: "newEmpManager",
-  //     type: "list",
-  //     message: chalk.greenBright("Who is the employee's manager?"),
-  //     choices: managerChoices
-  //   },
-  // ])
 }
 
 async function updateEmployeeRole() {
