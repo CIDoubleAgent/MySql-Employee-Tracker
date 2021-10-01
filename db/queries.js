@@ -2,6 +2,7 @@ const cTable = require('console.table');
 const inquirer = require('inquirer');
 const mysql = require("mysql2/promise");
 const connection = require('./db');
+const chalk = require('chalk');
 
 async function connectDb() {
     return await mysql.createConnection({
@@ -74,17 +75,17 @@ async function addEmployee() {
     {
       name: "newEmpFirstName",
       type: "input",
-      message: "What is the employees first name?"
+      message: chalk.greenBright("What is the employees first name?")
     },
     {
       name: "newEmpLastName",
       type: "input",
-      message: "What is the employees last name?"
+      message: chalk.greenBright("What is the employees last name?")
     },
     {
       name: "newEmpRole",
       type: "list",
-      message: "What is the employee's role?",
+      message: chalk.greenBright("What is the employee's role?"),
       choices: roleChoices
     },
   ]).then ((answers) => {
@@ -95,7 +96,7 @@ async function addEmployee() {
 
     //insert function to get manager names for list and prompt for employee manager
 
-    console.log("--Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database");
+    console.log(chalk.yellow("--Added ", answers.newEmpFirstName + " " + answers.newEmpLastName, " to the database"));
   });
 
   // [rows] = await connection.query(`SELECT * FROM employees`);
@@ -107,7 +108,7 @@ async function addEmployee() {
   //   {
   //     name: "newEmpManager",
   //     type: "list",
-  //     message: "Who is the employee's manager?",
+  //     message: chalk.greenBright("Who is the employee's manager?"),
   //     choices: managerChoices
   //   },
   // ])
@@ -128,7 +129,7 @@ async function updateEmployeeRole() {
     {
       name: "selectEmployee",
       type: "list",
-      message: "Which employee's role would you like to update?",
+      message: chalk.greenBright("Which employee's role would you like to update?"),
       choices: employeeChoices
     }
   ]).then(async (answers) => {
@@ -145,7 +146,7 @@ async function updateEmployeeRole() {
       {
         name: "newRole",
         type: "list",
-        message: "Which role do you want to assign the selected employee?",
+        message: chalk.greenBright("Which role do you want to assign the selected employee?"),
         choices: roleChoices
       }
     ]).then(async (response) => {
@@ -160,7 +161,8 @@ async function updateEmployeeRole() {
       await connection.query(
         `UPDATE employees SET role_id=${newRole.id} WHERE id=${selectedEmployee.id};`,
         {role_id: newRole.id}
-      );        
+      );
+      console.log(chalk.yellow("Updated employees role"));      
     });
   });
   
@@ -181,17 +183,17 @@ async function addRole() {
     {
       name: "newRoleName",
       type: "input",
-      message: "What is the name of the role?"
+      message: chalk.greenBright("What is the name of the role?")
     },
     {
       name: "newRoleSalary",
       type: "input",
-      message: "What is the salary of the role?"
+      message: chalk.greenBright("What is the salary of the role?")
     },
     {
       name: "newRoleDept",
       type: "list",
-      message: "Which department does the role belong to?",
+      message: chalk.greenBright("Which department does the role belong to?"),
       choices: departmentChoices
     },
   ]).then ((answers) => {
@@ -199,7 +201,7 @@ async function addRole() {
     `INSERT INTO roles SET ?`,
     {title: answers.newRoleName, salary: answers.newRoleSalary, department_id: answers.newRoleDept}
     );
-    console.log("--Added ", answers.newRoleName, " to the database");
+    console.log(chalk.yellow("--Added ", answers.newRoleName, " to the database"));
   });
 }
 
@@ -210,7 +212,7 @@ async function addDepartment() {
     {
       name: "newDepartment",
       type: "input",
-      message: "What is the name of the department?"
+      message: chalk.greenBright("What is the name of the department?")
     }
   ]).then (function (answer) {
     connection.query(
@@ -218,7 +220,7 @@ async function addDepartment() {
     {name: answer.newDepartment}
     );
     
-    console.log("--Added ", answer.newDepartment, " to the database");
+    console.log(chalk.yellow("--Added ", answer.newDepartment, " to the database"));
   });
 }
 

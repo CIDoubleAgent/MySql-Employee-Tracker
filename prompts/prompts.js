@@ -1,7 +1,9 @@
+const chalk = require("chalk");
+
 const startPrompt = [{
     type: "list",
     name: "options",
-    message: "What would you like to do?",
+    message: chalk.greenBright("What would you like to do?"),
     choices: [
         {
             value: "all_employees",
