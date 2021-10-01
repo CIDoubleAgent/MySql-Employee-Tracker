@@ -120,14 +120,10 @@ async function updateEmployeeRole() {
     `SELECT * FROM employees`
   );
 
- 
-
   const employeeChoices = employees.map(e => {
     return {name: e.first_name + " " + e.last_name, roleId: e.role_id, id: e.id}
   });
 
-  
-  console.log(employees)
   await inquirer.prompt([
     {
       name: "selectEmployee",
@@ -136,10 +132,10 @@ async function updateEmployeeRole() {
       choices: employeeChoices
     }
   ]).then(async (answers) => {
-    console.log(answers.selectEmployee);
     const [roles] = await connection.query(
       `SELECT * FROM roles`
-    );
+      );
+      console.table(roles);
     
     const roleChoices = roles.map(e => {
       return {id: e.id, name: e.title}
@@ -164,13 +160,8 @@ async function updateEmployeeRole() {
       await connection.query(
         `UPDATE employees SET role_id=${newRole.id} WHERE id=${selectedEmployee.id};`,
         {role_id: newRole.id}
-      );
-      console.log("end of query");
-  
-        
-    })
-
-    
+      );        
+    });
   });
   
 }
